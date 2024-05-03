@@ -3,6 +3,7 @@ package com.example.HireVis.service;
 import com.example.HireVis.dto.ResumeDTO;
 import com.example.HireVis.dto.UserProfileDTO;
 import com.example.HireVis.model.*;
+import com.example.HireVis.repository.ResumeRepo;
 import com.example.HireVis.repository.UserProfileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,13 @@ import java.util.Optional;
 @Component
 public class UserService {
     private UserProfileRepo userProfileRepo;
+    private ResumeRepo resumeRepo;
 
     @Autowired
-    public UserService(UserProfileRepo userProfileRepo){
+    public UserService(UserProfileRepo userProfileRepo, ResumeRepo resumeRepo){
+
         this.userProfileRepo=userProfileRepo;
+        this.resumeRepo=resumeRepo;
     }
 
     public UserProfile createUser(UserProfileDTO userProfileDTO){
@@ -44,6 +48,13 @@ public class UserService {
             return null;
         }
         return user.get();
+    }
+    public Resume getResume(int resumeId){
+        Optional<Resume> resume=resumeRepo.findById(resumeId);
+        if(resume.isEmpty()){
+            return null;
+        }
+        return resume.get();
     }
     private UserProfile mapToUserProfile(UserProfileDTO userProfileDTO){
         return new UserProfile(

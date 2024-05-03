@@ -1,14 +1,18 @@
 package com.example.HireVis.controller;
 
 import com.example.HireVis.dto.JobPostingDTO;
+import com.example.HireVis.dto.ScrapeSearchDTO;
 import com.example.HireVis.model.JobPosting;
 import com.example.HireVis.service.JobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class JobPostingController {
     private JobPostingService jobPostingService;
+
 
     @Autowired
     public JobPostingController(JobPostingService jobPostingService){
@@ -27,6 +31,20 @@ public class JobPostingController {
         // Process the DTO
         JobPosting jobPosting=jobPostingService.getJobPosting(postingId);
         return jobPosting==null?"Job Posting "+postingId+" NOT found":jobPosting.toString();
+    }
+
+    @GetMapping("/scrapeJobs")
+    public String scrapeJobPosting(@RequestBody ScrapeSearchDTO scrapeSearchDTO) {
+        // Process the DTO
+        List<JobPosting> jobPosting=jobPostingService.scrapeJobs(scrapeSearchDTO.getKeywords(),scrapeSearchDTO.getLocation());
+        return jobPosting.toString();
+    }
+
+    @GetMapping("/jobPostings")
+    public String getJobPosting() {
+        // Process the DTO
+        List<JobPosting> jobPosting=jobPostingService.getAllJobPosting();
+        return jobPosting.toString();
     }
 
 }

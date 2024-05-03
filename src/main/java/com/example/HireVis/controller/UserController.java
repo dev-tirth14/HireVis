@@ -34,6 +34,17 @@ public class UserController {
         return "User: "+ user.toString();
     }
 
+    @GetMapping("/resumes/{resumeId}")
+    public String getResume(@PathVariable int resumeId) {
+        // Process the DTO
+        Resume resume=userService.getResume(resumeId);
+        if(resume==null){
+            return "Resume not found";
+        }
+        return "Resume: "+ resume.toString();
+    }
+
+
     @PostMapping("/users/{userId}/createResume")
     public String createResume(@PathVariable int userId,@RequestBody ResumeDTO resumeDTO) {
         resumeDTO.setUser_id(userId);

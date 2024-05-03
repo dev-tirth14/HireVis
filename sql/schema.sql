@@ -104,7 +104,7 @@ CREATE TABLE `education` (
 
 CREATE TABLE `job_posting` (
   `id` varchar(15) NOT NULL,
-  `url` varchar(100) DEFAULT NULL,
+  `url` varchar(500) DEFAULT NULL,
   `role_name` varchar(30) DEFAULT NULL,
   `company_name` varchar(30) DEFAULT NULL,
   `description` TEXT DEFAULT NULL,
