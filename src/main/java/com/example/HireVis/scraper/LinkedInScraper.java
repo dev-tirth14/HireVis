@@ -31,7 +31,7 @@ public class LinkedInScraper implements Scraper{
             Document doc= Jsoup.connect(specifiedURL).get();
             Elements jobPostingCards=doc.select(".job-search-card");
 
-            for(Element element:jobPostingCards.subList(0,2)){
+            for(Element element:jobPostingCards.subList(0,10)){
                 String jobURL=element.select(".base-card__full-link").attr("href");
                 String postDate=element.select(".job-search-card__listdate--new").attr("datetime");
                 String[] brokenURL=jobURL.replace("https://www.linkedin.com/jobs/view/","").split("\\?")[0].split("-");
@@ -44,10 +44,13 @@ public class LinkedInScraper implements Scraper{
 
                 JobPostingDTO jobPosting=new JobPostingDTO(jobId,jobURL,jobName,companyName,description);
                 jobPostings.add(jobPosting);
+                Thread.sleep(5000);
             }
         }catch(IOException e){
             e.printStackTrace();
-
+            return null;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return jobPostings;
     }

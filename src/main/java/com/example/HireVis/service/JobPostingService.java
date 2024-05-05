@@ -38,7 +38,11 @@ public class JobPostingService {
     }
 
     public List<JobPosting> scrapeJobs(String keywords, String location){
+        jobPostingRepo.deleteAll();
         List<JobPostingDTO> jobPostingDTOs=scraper.getJobPostings(keywords,location);
+        if(jobPostingDTOs==null){
+            return null;
+        }
         List<JobPosting> jobPostings=jobPostingDTOs.stream().map(jobPostingDTO -> {
             return createJobPosting(jobPostingDTO);
         }).toList();

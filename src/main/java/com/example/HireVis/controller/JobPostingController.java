@@ -19,7 +19,7 @@ public class JobPostingController {
         this.jobPostingService=jobPostingService;
     }
 
-    @PostMapping("/createJobPosting")
+    @PostMapping("/jobPostings/create")
     public String createJobPosting(@RequestBody JobPostingDTO jobPostingDTO) {
         // Process the DTO
         JobPosting jobPosting=jobPostingService.createJobPosting(jobPostingDTO);
@@ -33,10 +33,13 @@ public class JobPostingController {
         return jobPosting==null?"Job Posting "+postingId+" NOT found":jobPosting.toString();
     }
 
-    @GetMapping("/scrapeJobs")
+    @GetMapping("/jobPostings/scrape")
     public String scrapeJobPosting(@RequestBody ScrapeSearchDTO scrapeSearchDTO) {
         // Process the DTO
         List<JobPosting> jobPosting=jobPostingService.scrapeJobs(scrapeSearchDTO.getKeywords(),scrapeSearchDTO.getLocation());
+        if(jobPosting==null){
+            return "Something went wrong! Try again later.";
+        }
         return jobPosting.toString();
     }
 

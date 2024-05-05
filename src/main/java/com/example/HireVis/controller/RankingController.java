@@ -7,6 +7,7 @@ import com.example.HireVis.service.RankingService;
 import com.example.HireVis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,11 +25,22 @@ public class RankingController {
         this.rankingService=rankingService;
     }
 
-    @GetMapping("/getRankings")
-    public String getRankings() {
-        // Process the DTO
-        Resume resume=userService.getResume(1);
+    @GetMapping("/users/{userID}/rankJobs")
+    public String rankJobs(@PathVariable int userID) {
+        Resume resume=userService.getUser(userID).getResumes().get(0);
         List<JobPosting> jobPostings=jobPostingService.getAllJobPosting();
-        return rankingService.rankJobsBasedOnResume(resume,jobPostings);
+        List<JobPosting> rankedJobPostings=rankingService.rankJobsBasedOnResume(resume,jobPostings);
+
+        return rankedJobPostings.stream().map(jobPosting -> jobPosting.getRoleName()+" @ "+jobPosting.getCompanyName()).toList().toString();
     }
+    @GetMapping("/getRankedJobs")
+    public String getRankedJobs() {
+        List<JobPosting> jobPostings=rankingService.getAllRankedJobs();
+        String responseString="";
+        return String.join("\n",jobPostings.stream()
+                .map(jobPosting -> jobPosting.getRoleName()+" @ "+jobPosting.getCompanyName()+" ---> "+jobPosting.getUrl())
+                .toList());
+    }
+
+
 }
