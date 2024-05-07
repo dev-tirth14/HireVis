@@ -113,6 +113,11 @@ CREATE TABLE `job_posting` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `rankings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `job_posting_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `resume_skill` (
   `skill_id` int NOT NULL,
